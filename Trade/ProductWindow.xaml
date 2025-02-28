@@ -1,0 +1,133 @@
+﻿<Window x:Class="Trade.ProductWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Trade"
+        mc:Ignorable="d"
+        Title="Продукция" Height="700" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        FontFamily="{DynamicResource GlobalFont}">
+    <Window.Resources>
+        <Style x:Key="AdminTools" TargetType="Grid">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=AdminStatus, Path=Text}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="TB_DiscountPrice" TargetType="TextBlock">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ProductOnDiscount}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="TB_Price" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ProductOnDiscount}" Value="True">
+                    <Setter Property="TextDecorations" Value="Strikethrough"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Available_Grid" TargetType="Grid">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ProductAvailable}" Value="False">
+                    <Setter Property="Background" Value="Silver"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="4*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid>
+                <Image Source="/logo.png" VerticalAlignment="Top" HorizontalAlignment="Left" Width="30px"/>
+                <TextBlock Text="ООО 'Ювелир'" Margin="35,5,0,0" VerticalAlignment="Top" FontSize="11pt"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <TextBlock Text="Поиск" Margin="5px 0 0 0" FontSize="10pt"/>
+                <TextBox x:Name="Search" VerticalAlignment="Center" Width="240px" Height="30px" FontSize="13pt" VerticalContentAlignment="Center" Padding="10px 0 0 0" TextChanged="Search_TextChanged"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <TextBlock Text="Сортировка по цене" Margin="5px 0 0 0" FontSize="10pt"/>
+                <ComboBox VerticalAlignment="Center" Height="30px" FontSize="13pt" Width="240px" x:Name="FilterCost" SelectionChanged="FilterCost_SelectionChanged">
+                    <ComboBoxItem Content="Нет" Selector.IsSelected="True"/>
+                    <ComboBoxItem Content="По возрастанию"/>
+                    <ComboBoxItem Content="По убыванию"/>
+                </ComboBox>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="2">
+                <TextBlock Text="Сортировка по производителю" Margin="5px 0 0 0" FontSize="10pt"/>
+                <ComboBox VerticalAlignment="Center" Height="30px" FontSize="13pt" Width="240px" x:Name="FilterManufracturer" SelectionChanged="FilterManufracturer_SelectionChanged"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="3">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Товаров в списке:" FontSize="13pt" VerticalAlignment="Center" Margin="5px 0 0 0"/>
+                    <TextBlock Text="" FontSize="13pt" VerticalAlignment="Center" Margin="5px 0 0 0" x:Name="CountProducts"/>
+                    <TextBlock Text=" из " FontSize="13pt" VerticalAlignment="Center" Margin="5px 0 0 0"/>
+                    <TextBlock Text="" FontSize="13pt" VerticalAlignment="Center" Margin="5px 0 0 0" x:Name="TotalProducts"/>
+                    <TextBlock Text="True" Visibility="Collapsed" x:Name="AdminStatus"/>
+                </StackPanel>
+                <Grid Style="{StaticResource AdminTools}">
+                    <Button Content="Добавить товар" Height="20px" Width="150px" VerticalAlignment="Bottom"/>
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <ListBox x:Name="Products" HorizontalAlignment="Center">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="900px" Style="{StaticResource Available_Grid}">
+                            <Grid Margin="0 0 50px 0" Style="{StaticResource AdminTools}">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right">
+                                    <TextBlock Text="Артикул: "/>
+                                    <TextBlock Text="{Binding Path=ProductArticleNumber}" />
+                                </StackPanel>
+                                <StackPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0 0 0 10px">
+                                    <Button Content="Редактировать" Tag="{Binding Path=ProductArticleNumber}" Width="100px" Margin="0 0 10px 0" x:Name="EditButton" Click="EditButton_Click"/>
+                                    <Button Content="Удалить" Tag="{Binding Path=ProductArticleNumber}" Width="100px" x:Name="DeleteButton" Click="DeleteButton_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding Path=ProductPhotoImage}" Width="200px" Margin="0 0 30px 0"/>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Path=ProductName}" FontSize="16pt" Margin="0 10px 0 0"/>
+                                    <TextBlock Text="{Binding Path=ProductDescription}" FontSize="12pt" TextWrapping="Wrap" Margin="0 1px 0 10px"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Производитель: " FontSize="12pt"/>
+                                        <TextBlock Text="{Binding Path=ProductManufacturer}" FontSize="12pt"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Цена: " FontSize="12pt"/>
+                                        <TextBlock Text="{Binding Path=ProductCost, StringFormat={}{0:N2}}" Style="{StaticResource TB_Price}" FontSize="12pt"/>
+                                        <TextBlock Text=" "/>
+                                        <TextBlock Text="{Binding Path=ProductCostDiscounting, StringFormat={}{0:N2}}" Style="{StaticResource TB_DiscountPrice}" FontSize="12pt"/>
+                                        <TextBlock Text=" " Style="{StaticResource TB_DiscountPrice}"/>
+                                        <TextBlock Text="₽" FontSize="12pt"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Grid>
+</Window>
