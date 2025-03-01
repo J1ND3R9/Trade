@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -55,7 +57,7 @@ namespace Trade
             {
                 return;
             }
-            List<Product> products = Trade.Products.ToList();
+            List<Product> products = Trade.Products.AsNoTracking().ToList();
             string? search = Search.Text.ToLower();
             string[] words = search.Split(' ');
             string manuf = FilterManufracturer.SelectedItem.ToString();
@@ -71,7 +73,7 @@ namespace Trade
         {
             Button b = (Button)sender;
             RedactProduct window = new();
-            Product product = Trade.Products.First(p => p.ProductArticleNumber == b.Tag.ToString());
+            Product product = Trade.Products.AsNoTracking().First(p => p.ProductArticleNumber == b.Tag.ToString());
             window.Article.Text = product.ProductArticleNumber;
             window.Article.IsEnabled = false;
             window.Name.Text = product.ProductName;
@@ -86,10 +88,27 @@ namespace Trade
             window.ShowDialog();
             RefreshProducts();
         }
-
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
+            Button b = (Button)sender;
+            Product p = Trade.Products.First(p => p.ProductArticleNumber == b.Tag.ToString());
+            if (IsOrdered(p))
+            {
+                MessageBox.Show("Данный продукт уже заказан", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            Trade.Products.Remove(p);
+            Trade.SaveChanges();
+            RefreshProducts();
+        }
+        private bool IsOrdered(Product p) => p.Orders.Intersect(Trade.Orders).Any();
 
+        private void AddProduct_Click(object sender, RoutedEventArgs e)
+        {
+            RedactProduct window = new();
+            window.Title = "Добавление";
+            window.ShowDialog();
+            RefreshProducts();
         }
     }
 }

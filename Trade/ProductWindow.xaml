@@ -46,6 +46,7 @@
             <RowDefinition/>
             <RowDefinition Height="4*"/>
         </Grid.RowDefinitions>
+        <TextBlock Text="В режиме гостя" x:Name="Username" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10px" FontSize="13pt"/>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -83,15 +84,15 @@
                     <TextBlock Text="" FontSize="13pt" VerticalAlignment="Center" Margin="5px 0 0 0" x:Name="CountProducts"/>
                     <TextBlock Text=" из " FontSize="13pt" VerticalAlignment="Center" Margin="5px 0 0 0"/>
                     <TextBlock Text="" FontSize="13pt" VerticalAlignment="Center" Margin="5px 0 0 0" x:Name="TotalProducts"/>
-                    <TextBlock Text="True" Visibility="Collapsed" x:Name="AdminStatus"/>
+                    <TextBlock Text="False" Visibility="Collapsed" x:Name="AdminStatus"/>
                 </StackPanel>
                 <Grid Style="{StaticResource AdminTools}">
-                    <Button Content="Добавить товар" Height="20px" Width="150px" VerticalAlignment="Bottom"/>
+                    <Button Content="Добавить товар" Height="20px" Width="150px" VerticalAlignment="Bottom" x:Name="AddProduct" Click="AddProduct_Click"/>
                 </Grid>
             </Grid>
         </Grid>
         <Grid Grid.Row="1">
-            <ListBox x:Name="Products" HorizontalAlignment="Center">
+            <ListBox x:Name="Products" HorizontalAlignment="Center" Width="900px">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid Width="900px" Style="{StaticResource Available_Grid}">

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Trade"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="600" Width="350"
+        Title="Вход в аккаунт" Height="600" Width="350"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         FontFamily="{DynamicResource GlobalFont}">
@@ -98,10 +98,10 @@
                 </Border>
                 <TextBox Height="30px" Width="260px" FontSize="11pt" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" x:Name="captchaBox"/>
             </StackPanel>
-            <Button Style="{StaticResource DefaultButtonStyle}" Content="Войти" Width="260px" Height="50px" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="Login"/>
+            <Button Style="{StaticResource DefaultButtonStyle}" Content="Войти" Width="260px" x:Name="LoginButton" Height="50px" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Click="Login"/>
         </Grid>
         <Grid Grid.Row="5">
-            <Button Style="{StaticResource GuestMode}" x:Name="LoginButton" Content="Войти в режиме гостя" HorizontalContentAlignment="Right" VerticalAlignment="Top" Margin="187,13,20,0"/>
+            <Button Style="{StaticResource GuestMode}" x:Name="GuestLogin" Click="GuestLogin_Click" Content="Войти в режиме гостя" HorizontalContentAlignment="Right" VerticalAlignment="Top" Margin="187,13,20,0"/>
         </Grid>
     </Grid>
 </Window>

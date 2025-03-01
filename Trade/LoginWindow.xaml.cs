@@ -78,7 +78,7 @@ namespace Trade
             {
                 string login = loginBox.Text;
                 string password = passwordBox.Password;
-                User account = Trade.Users.First(s => s.UserPassword == password && s.UserLogin == login);
+                User? account = Trade.Users.FirstOrDefault(s => s.UserPassword == password && s.UserLogin == login);
                 string captcha = "";
                 if (isCaptcha)
                 {
@@ -109,6 +109,7 @@ namespace Trade
                 }
                 ProductWindow window = new ProductWindow();
                 window.AdminStatus.Text = account.UserRole > 2 ? "True" : "False";
+                window.Username.Text = account.UserSurname + " " + account.UserName + " " + account.UserPatronymic;
                 window.Show();
                 this.Close();
             }
@@ -123,6 +124,14 @@ namespace Trade
             LoginButton.IsEnabled = false;
             await Task.Delay(10000);
             LoginButton.IsEnabled = true;
+        }
+
+        private void GuestLogin_Click(object sender, RoutedEventArgs e)
+        {
+            ProductWindow window = new();
+            window.AdminStatus.Text = "False";
+            window.Show();
+            this.Close();
         }
     }
 }
